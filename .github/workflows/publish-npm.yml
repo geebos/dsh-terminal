@@ -1,0 +1,95 @@
+name: Publish to npm
+
+# Publish with npm Trusted Publishing (OIDC). No NPM_TOKEN.
+#
+# Prerequisites on npmjs.com → package "@geebos/dsh-terminal" → Settings
+# → Trusted Publisher → GitHub Actions:
+#   Organization or user : geebos
+#   Repository           : dsh-terminal
+#   Workflow filename    : publish-npm.yml
+#   Allowed actions      : npm publish
+#
+# Requirements: Node ≥ 22.14 (this workflow uses 24), npm ≥ 11.5.1
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Version tag to publish (e.g. v1.0.0)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve git ref
+        id: meta
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ inputs.tag }}"
+          else
+            TAG="${GITHUB_REF_NAME}"
+          fi
+          case "$TAG" in
+            v[0-9]*) ;;
+            *)
+              echo "Tag must look like v1.2.3, got: $TAG"
+              exit 1
+              ;;
+          esac
+          VERSION="${TAG#v}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Publishing $TAG ($VERSION)"
+
+      - name: Checkout tag
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ steps.meta.outputs.tag }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          # Node 24 ships npm ≥ 11.5.1 (required for Trusted Publishing)
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+
+      - name: Show Node / npm versions
+        run: |
+          node -v
+          npm -v
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+      - name: Sync package version from tag
+        run: |
+          npm version "${{ steps.meta.outputs.version }}" \
+            --no-git-tag-version \
+            --allow-same-version
+
+      - name: Ensure package name
+        run: |
+          NAME="$(node -p "require('./package.json').name")"
+          if [ "$NAME" != "@geebos/dsh-terminal" ]; then
+            echo "Expected package name @geebos/dsh-terminal, got: $NAME"
+            exit 1
+          fi
+
+      # Trusted Publishing: npm CLI detects GitHub OIDC automatically.
+      # Do NOT set NODE_AUTH_TOKEN — that forces classic token auth.
+      - name: Publish to npm
+        run: npm publish --access public --provenance
