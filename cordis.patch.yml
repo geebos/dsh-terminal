@@ -1,0 +1,6 @@
+# The dsh-terminal plugin as a dsh web overlay: mount the single row that adds
+# a collapsible in-conversation terminal. Apply over the web profile with
+# `dsh web --patch <path-to-this-file>`.
+- insert:
+    - id: dsh-terminal
+      name: '@geebos/dsh-terminal'
