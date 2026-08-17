@@ -89,6 +89,11 @@ jobs:
             exit 1
           fi
 
+      # npm reads the root README.md for the package page; swap in the
+      # English copy so npm shows English while GitHub keeps the zh README.
+      - name: Use English README for npm
+        run: cp README.en.md README.md
+
       # Trusted Publishing: npm CLI detects GitHub OIDC automatically.
       # Do NOT set NODE_AUTH_TOKEN — that forces classic token auth.
       - name: Publish to npm

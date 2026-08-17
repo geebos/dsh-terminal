@@ -1,7 +1,7 @@
 {
   "name": "@geebos/dsh-terminal",
   "description": "A collapsible in-conversation interactive terminal: each tab is a live host PTY (xterm.js over WebSocket) with per-project persistent quick commands",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "repository": {
     "type": "git",

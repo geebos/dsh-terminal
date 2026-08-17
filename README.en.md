@@ -16,14 +16,14 @@ Embeds a **collapsible interactive terminal** inside DeepSeek Harness Web conver
 
 ## Features
 
-- **Real terminal**: each tab is a live interactive PTY (`$SHELL -i`) with per-keystroke input and streaming output; full-screen apps like `vim` / `less` work in and out.
-- **TTY semantics**: Ctrl-C / Ctrl-D / Ctrl-Z and other control characters follow PTY semantics.
-- **Reconnect & replay**: auto-reconnects after a page refresh / network hiccup and replays recent output (512 KiB ring buffer on the host); sessions are clearly reported as terminated after a host restart.
-- **Quick commands**: title-bar chips inject a command into the current tab on click; the ⚙ dialog manages them (add / remove / edit, aliases), persisted across sessions.
-- **Pin**: the pin button toggles pin / unpin (unpin by default); when unpinned, clicking outside the card collapses it automatically.
-- **Tab management**: `+` new tab, `×` close (terminates its PTY process tree), ■ sends SIGTERM to the current tab; after the shell exits the tab shows an `exit N` status bar with one-click reopen.
-- **Invisible to the agent**: execution is not written to the session log and produces no tool calls.
-- **i18n & theme**: the UI goes through LocaleRuntime (bilingual); terminal colors follow the web theme in real time.
+- **Real terminal**: a live shell in each tab; full-screen apps like `vim` / `less` work fine.
+- **Familiar keys**: Ctrl-C / Ctrl-D / Ctrl-Z behave like your local terminal.
+- **Auto-reconnect**: recovers from page refreshes and network hiccups, replaying recent output.
+- **Quick commands**: one-click chips run frequent commands; the ⚙ dialog manages them (aliases included).
+- **Pin**: keep the panel open, or let it auto-collapse when you click outside.
+- **Multi-tab**: open, close, and restart shells; an `exit N` bar lets you reopen a finished shell.
+- **Invisible to the agent**: your terminal activity stays out of the chat.
+- **Bilingual & theme-aware**: UI in English and Chinese; colors follow the web theme.
 
 ## Installation
 
@@ -37,7 +37,7 @@ After installing, restart `dsh web`; the terminal title bar appears above the co
 
 ## Usage
 
-- Click the title bar to expand the terminal; `+` creates a tab, `×` closes one (terminating its PTY process tree), ■ ends the current tab's shell.
+- Click the title bar to expand the terminal; `+` creates a tab, `×` closes one, ■ ends the current tab's shell.
 - The chips in the expanded title bar are quick commands — click to inject into the current tab; ⚙ manages commands and aliases.
 - The pin button controls pinning: when pinned, clicking outside the card no longer collapses it.
 - After a page refresh or network hiccup it auto-reconnects and replays recent output; after a host restart you need to create a new tab.
