@@ -3,6 +3,10 @@
   "description": "A collapsible in-conversation interactive terminal: each tab is a live host PTY (xterm.js over WebSocket) with per-project persistent quick commands",
   "version": "1.0.0",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geebos/dsh-terminal.git"
+  },
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
