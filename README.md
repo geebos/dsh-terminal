@@ -92,3 +92,7 @@ cd dsh-terminal && npm run dev
 ```
 
 依赖说明：`@xterm/xterm`、`@xterm/addon-web-links` 内联进 `lib/client.js`，`ws` 内联进 `lib/index.js`（均为 devDependencies）；升级 `@xterm/xterm` 后运行 `npm run embed:css` 重新生成内嵌样式。
+
+## 友情链接
+
+- [LINUX DO](https://linux.do/) —— Where possible begins

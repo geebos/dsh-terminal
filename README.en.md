@@ -92,3 +92,7 @@ cd dsh-terminal && npm run dev
 ```
 
 Dependency notes: `@xterm/xterm` and `@xterm/addon-web-links` are inlined into `lib/client.js`, `ws` into `lib/index.js` (all devDependencies); after upgrading `@xterm/xterm`, run `npm run embed:css` to regenerate the embedded styles.
+
+## Friends
+
+- [LINUX DO](https://linux.do/) — Where possible begins
