@@ -38,7 +38,7 @@
   ],
   "publishConfig": {
     "access": "public",
-    "registry": "http://localhost:9007/"
+    "registry": "https://registry.npmjs.org/"
   },
   "dsh": {
     "bundle": {

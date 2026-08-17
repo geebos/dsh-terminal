@@ -45,18 +45,18 @@ npm dsh plugin --profile web add @geebos/dsh-terminal
 ## 架构
 
 ```
-浏览器                                    host（dsh web = 用户本机）
-┌──────────────────────────┐             ┌─────────────────────────────────────┐
-│ Terminal 组件（React）     │  控制面 RPC  │ TerminalService（TypertRemoteService）│
-│  tab 栏 / chips / 📌 / ⚙   │ ──────────▶ │  list / save / createTab / closeTab │
-│  xterm.js × N（每 tab 一） │             │  signalTab（agent-scoped）           │
-│  PtyConnection × N        │ ◀═══════════▶ │        │ spawn/kill                  │
-└──────────────────────────┘  数据面 WS    │        ▼                              │
-                               （二进制帧）  │ PtySessionManager（ring/背压/生命周期）│
-                                           │   │ subprocess.spawnTerminal()        │
-                                           │   ▼                                  │
-                                           │ node-pty → sh -c 'TERM=…; exec … -i' │
-                                           └─────────────────────────────────────┘
+浏览器                                     host（dsh web = 用户本机）
+┌────────────────────────────┐             ┌──────────────────────────────────────────┐
+│ Terminal 组件（React）     │控制面 RPC   │ TerminalService（TypertRemoteService）   │
+│ tab 栏 / chips / 图钉/齿轮 │────────────→│ list / save / createTab / closeTab       │
+│ xterm.js × N（每 tab 一）  │             │ signalTab（agent-scoped）                │
+│ PtyConnection × N          │←═══════════→│         │ spawn/kill                     │
+└────────────────────────────┘数据面 WS    │         ↓                                │
+                              （二进制帧） │ PtySessionManager（ring/背压/生命周期）  │
+                                           │   │ subprocess.spawnTerminal()           │
+                                           │   ↓                                      │
+                                           │ node-pty → sh -c 'TERM=…; exec … -i'     │
+                                           └──────────────────────────────────────────┘
 ```
 
 - **控制面**（Typert，一元 JSON RPC）：tab 元数据与快捷命令，需要 `agent` 上下文（会话 cwd、沙箱策略、生命周期钩子）。

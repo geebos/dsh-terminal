@@ -45,18 +45,18 @@ After installing, restart `dsh web`; the terminal title bar appears above the co
 ## Architecture
 
 ```
-Browser                                   host (dsh web = your machine)
-┌──────────────────────────┐             ┌─────────────────────────────────────┐
-│ Terminal component (React)│  control RPC │ TerminalService (TypertRemoteService)│
-│  tabs / chips / 📌 / ⚙    │ ──────────▶ │  list / save / createTab / closeTab │
-│  xterm.js × N (one/tab)  │             │  signalTab (agent-scoped)           │
-│  PtyConnection × N       │ ◀═══════════▶ │        │ spawn/kill                  │
-└──────────────────────────┘  data WS     │        ▼                              │
-                              (binary)    │ PtySessionManager (ring/backpressure) │
-                                          │   │ subprocess.spawnTerminal()        │
-                                          │   ▼                                  │
-                                          │ node-pty → sh -c 'TERM=…; exec … -i' │
-                                          └─────────────────────────────────────┘
+Browser                                    host (dsh web = your machine)
+┌────────────────────────────┐             ┌──────────────────────────────────────────┐
+│ Terminal component (React) │control RPC  │ TerminalService (TypertRemoteService)    │
+│ tabs / chips / pin / gear  │────────────→│ list / save / createTab / closeTab       │
+│ xterm.js × N (one/tab)     │             │ signalTab (agent-scoped)                 │
+│ PtyConnection × N          │←═══════════→│         │ spawn/kill                     │
+└────────────────────────────┘data WS      │         ↓                                │
+                              (binary)     │ PtySessionManager (ring/backpressure)    │
+                                           │   │ subprocess.spawnTerminal()           │
+                                           │   ↓                                      │
+                                           │ node-pty → sh -c 'TERM=…; exec … -i'     │
+                                           └──────────────────────────────────────────┘
 ```
 
 - **Control plane** (Typert, unary JSON RPC): tab metadata and quick commands; requires `agent` context (session cwd, sandbox policy, lifecycle hooks).
